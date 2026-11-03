@@ -1,0 +1,1525 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Game Menu</title>
+
+<style>
+:root {
+    color-scheme: light;
+    --bg:#FFF8E9;
+    --header:#FFFFFF;
+    --card:#FFFFFF;
+    --hover:#FFF0D5;
+    --primary:#FF6B35;
+    --text:#343434;
+    --muted:#858585;
+    --border:#F0E3CF;
+    --teal:#36B6A1;
+    --yellow:#FFD166;
+    --pink:#EF709D;
+    --input:#FFFFFF;
+    --overlay:rgba(40,35,25,.65);
+    --detail:#FFF0D5;
+}
+
+[data-theme="dark"] {
+    color-scheme:dark;
+    --bg:#191C25;
+    --header:#222633;
+    --card:#252A38;
+    --hover:#303748;
+    --primary:#FF8057;
+    --text:#F5F3EE;
+    --muted:#A6ACBA;
+    --border:#3A4050;
+    --teal:#48C9B5;
+    --input:#252A38;
+    --overlay:rgba(0,0,0,.8);
+    --detail:#373447;
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body {
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    transition:background .25s,color .25s;
+}
+
+header {
+    padding:20px 6%;
+    background:var(--header);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo {
+    font-size:23px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.logo span {
+    color:var(--primary);
+}
+
+.header-right {
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.header-label {
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:1px;
+}
+
+.theme-toggle {
+    padding:9px 14px;
+    border-radius:25px;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--text);
+    cursor:pointer;
+    font-size:13px;
+    font-weight:600;
+}
+
+.theme-toggle:hover {
+    border-color:var(--primary);
+}
+
+.hero {
+    text-align:center;
+    padding:50px 6% 35px;
+}
+
+.hero-label {
+    display:inline-block;
+    padding:8px 14px;
+    border-radius:20px;
+    background:#FFE3D5;
+    color:#E85D2B;
+    font-size:11px;
+    font-weight:bold;
+    margin-bottom:18px;
+}
+
+[data-theme="dark"] .hero-label {
+    background:#49352F;
+    color:#FFAE8D;
+}
+
+.hero h1 {
+    font-size:clamp(32px,5vw,48px);
+    margin-bottom:12px;
+}
+
+.hero h1 span {
+    color:var(--primary);
+}
+
+.hero p {
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.7;
+}
+
+.container {
+    max-width:1400px;
+    margin:auto;
+    padding:20px 6% 70px;
+}
+
+.search-area {
+    margin-bottom:15px;
+}
+
+.search-area input {
+    width:100%;
+    padding:15px 18px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--input);
+    color:var(--text);
+    outline:none;
+    font-size:14px;
+}
+
+.search-area input:focus,
+.filters select:focus {
+    border-color:var(--primary);
+}
+
+.filters {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:35px;
+}
+
+.filters select {
+    padding:11px 14px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--input);
+    color:var(--text);
+    font-size:13px;
+    outline:none;
+    cursor:pointer;
+}
+
+.section-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.section-heading h2 {
+    font-size:21px;
+}
+
+.game-count {
+    color:var(--muted);
+    font-size:13px;
+}
+
+.game-grid {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:20px;
+}
+
+.game-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:13px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.game-card:hover {
+    transform:translateY(-5px);
+    background:var(--hover);
+    border-color:var(--primary);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.game-image {
+    height:180px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    overflow:hidden;
+}
+
+.game-image img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.cover-placeholder {
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:15px;
+    color:white;
+}
+
+.cover-placeholder .cover-name {
+    font-size:19px;
+    font-weight:800;
+    text-shadow:0 2px 5px rgba(0,0,0,.3);
+}
+
+.cover-placeholder small {
+    margin-top:8px;
+    font-size:9px;
+    letter-spacing:2px;
+    opacity:.85;
+}
+
+.category-tag {
+    position:absolute;
+    top:12px;
+    left:12px;
+    background:var(--teal);
+    color:white;
+    padding:6px 10px;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.game-info {
+    padding:16px;
+}
+
+.game-info h3 {
+    font-size:15px;
+    line-height:1.4;
+    min-height:42px;
+    margin-bottom:8px;
+}
+
+.category-tags {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:13px;
+}
+
+.category-pill {
+    background:var(--detail);
+    color:var(--primary);
+    padding:4px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:600;
+}
+
+.game-stats {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:5px;
+    border-top:1px solid var(--border);
+    padding-top:12px;
+}
+
+.stat {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.stat-label {
+    color:var(--muted);
+    font-size:10px;
+}
+
+.stat-value {
+    font-size:12px;
+    font-weight:500;
+}
+
+.complexity {
+    color:var(--primary);
+}
+
+.no-results {
+    display:none;
+    text-align:center;
+    padding:50px 10px;
+    color:var(--muted);
+}
+
+.no-results h3 {
+    color:var(--text);
+    margin-bottom:8px;
+}
+
+/* MODAL */
+
+.modal {
+    position:fixed;
+    inset:0;
+    background:var(--overlay);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+    overflow-y:auto;
+}
+
+.modal.active {
+    display:flex;
+}
+
+.modal-content {
+    background:var(--card);
+    width:100%;
+    max-width:650px;
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    position:relative;
+    margin:auto;
+    animation:modalOpen .2s ease;
+}
+
+@keyframes modalOpen {
+    from {opacity:0;transform:translateY(15px)}
+    to {opacity:1;transform:translateY(0)}
+}
+
+.modal-image {
+    height:250px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    text-align:center;
+    padding:25px;
+    font-size:25px;
+    font-weight:bold;
+}
+
+.modal-image img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.close-btn {
+    position:absolute;
+    right:15px;
+    top:15px;
+    width:36px;
+    height:36px;
+    border:0;
+    border-radius:50%;
+    background:white;
+    color:#343434;
+    font-size:23px;
+    cursor:pointer;
+}
+
+.modal-body {
+    padding:25px;
+}
+
+.modal-body h2 {
+    font-size:25px;
+    line-height:1.3;
+    margin:12px 0 20px;
+}
+
+.modal-category-list {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.modal-category {
+    display:inline-block;
+    background:var(--detail);
+    color:var(--primary);
+    padding:6px 11px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.detail-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.detail-box {
+    background:var(--detail);
+    padding:14px;
+    border-radius:9px;
+}
+
+.detail-box:nth-child(2) {
+    background:#DDF5EF;
+    color:#236E63;
+}
+
+.detail-box:nth-child(3) {
+    background:#FFE3EC;
+    color:#A63D66;
+}
+
+[data-theme="dark"] .detail-box:nth-child(2) {
+    background:#244D49;
+    color:#B1F0E5;
+}
+
+[data-theme="dark"] .detail-box:nth-child(3) {
+    background:#513344;
+    color:#FFC0D5;
+}
+
+.detail-box small {
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:8px;
+}
+
+.detail-box strong {
+    font-size:14px;
+}
+
+.detail-section {
+    border-top:1px solid var(--border);
+    padding-top:18px;
+    margin-top:18px;
+}
+
+.detail-section h4 {
+    margin-bottom:10px;
+    font-size:15px;
+}
+
+.detail-section p {
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.7;
+}
+
+.mechanic-list {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.mechanic-tag {
+    background:var(--detail);
+    color:var(--text);
+    padding:7px 10px;
+    border-radius:6px;
+    font-size:11px;
+}
+
+footer {
+    padding:25px;
+    text-align:center;
+    border-top:1px solid var(--border);
+    color:var(--muted);
+    background:var(--header);
+    font-size:12px;
+}
+
+@media(max-width:1050px) {
+    .game-grid {
+        grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+}
+
+@media(max-width:700px) {
+    header {padding:18px 5%}
+    .header-label {display:none}
+    .game-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .game-image {height:150px}
+    .game-info {padding:12px}
+    .game-info h3 {font-size:13px}
+    .container {padding-left:5%;padding-right:5%}
+}
+
+@media(max-width:420px) {
+    .game-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+    .game-image {height:150px}
+    .logo {font-size:18px}
+    .theme-toggle {font-size:11px;padding:8px}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo"><span>BEETA'S</span> COLLECTION</div>
+
+    <div class="header-right">
+        <div class="header-label">DISCOVER · CHOOSE · PLAY</div>
+
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span id="themeIcon">🌙</span>
+            <span id="themeText">Dark Mode</span>
+        </button>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-label">YOUR NEXT GAME NIGHT STARTS HERE</div>
+    <h1>Find Your Next <span>Game.</span></h1>
+    <p>Explore our board game collection and find the perfect game.</p>
+</section>
+
+<main class="container">
+
+    <div class="search-area">
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Search board games..."
+            oninput="filterGames()"
+        >
+    </div>
+
+    <div class="filters">
+
+        <select id="playerFilter" onchange="filterGames()">
+            <option value="">All Players</option>
+            <option value="1">1 Player</option>
+            <option value="2">2 Players</option>
+            <option value="3">3+ Players</option>
+            <option value="4">4+ Players</option>
+            <option value="6">6+ Players</option>
+            <option value="8">8+ Players</option>
+        </select>
+
+        <select id="timeFilter" onchange="filterGames()">
+            <option value="">Any Playtime</option>
+            <option value="30">30 min or less</option>
+            <option value="60">31–60 min</option>
+            <option value="90">61–90 min</option>
+            <option value="91">More than 90 min</option>
+        </select>
+
+        <select id="complexityFilter" onchange="filterGames()">
+            <option value="">Any Difficulty</option>
+            <option value="1">Light (1–2)</option>
+            <option value="2">Medium (2–3)</option>
+            <option value="3">Heavy (3–5)</option>
+            <option value="na">Not Rated</option>
+        </select>
+
+    </div>
+
+    <div class="section-heading">
+        <h2>Explore Board Games</h2>
+        <span class="game-count" id="gameCount"></span>
+    </div>
+
+    <div class="game-grid" id="gameGrid"></div>
+
+    <div class="no-results" id="noResults">
+        <h3>No games found</h3>
+        <p>Try changing your search or filters.</p>
+    </div>
+
+</main>
+
+<footer>
+    Beeta's Collection · DISCOVER YOUR NEXT FAVOURITE GAME
+</footer>
+
+<div class="modal" id="gameModal" onclick="closeOutside(event)">
+
+    <div class="modal-content">
+
+        <button class="close-btn" onclick="closeModal()">×</button>
+
+        <div class="modal-image" id="modalImage"></div>
+
+        <div class="modal-body">
+
+            <div class="modal-category-list" id="modalCategory"></div>
+
+            <h2 id="modalTitle"></h2>
+
+            <div class="detail-grid">
+
+                <div class="detail-box">
+                    <small>Players</small>
+                    <strong id="modalPlayers"></strong>
+                </div>
+
+                <div class="detail-box">
+                    <small>Playtime</small>
+                    <strong id="modalTime"></strong>
+                </div>
+
+                <div class="detail-box">
+                    <small>Difficulty</small>
+                    <strong id="modalComplexity"></strong>
+                </div>
+
+            </div>
+
+            <div class="detail-section" id="modalWinSection" hidden>
+                <h4>How to Win</h4>
+                <p id="modalWin"></p>
+            </div>
+
+            <div class="detail-section">
+                <h4>Game Mechanics</h4>
+                <div class="mechanic-list" id="modalMechanics"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+/* =========================================
+   BOARD GAME COLLECTION
+   [Title, Min Players, Max Players, Time, Difficulty]
+========================================= */
+
+const collectionRecords = [
+    ["12 Rivers", 2, 4, 75, 2],
+    ["Arkham Horror", 1, 8, 240, 3.5866],
+    ["Batman: Gotham City Chronicles", 2, 4, 90, 3.7652],
+    ["Battle of Bomoh", 2, 5, 25, 1],
+    ["Blood Rage", 2, 4, 90, 2.8816],
+    ["Buffet Boss", 1, 5, 20, 1.08],
+    ["Camel Up (Second Edition)", 3, 8, 45, 1.5124],
+    ["Comic Hunters", 1, 4, 60, 2.2308],
+    ["Critter Kitchen", 1, 5, 60, 2.4486],
+    ["Cubitos", 2, 4, 60, 2.1667],
+    ["DCeased: Gotham City Outbreak", 1, 4, 60, 2.3636],
+    ["Dead of Winter: The Long Night", 2, 5, 120, 3.3318],
+    ["Drillers", 1, 4, 120, 2.6471],
+    // ["Dungeon Mayhem", 2, 4, 10, 1.1441],
+    // ["Dungeon Mayhem: Battle for Baldur's Gate", 2, 4, 10, 1.3125],
+    // ["Dungeon Mayhem: Monster Madness", 2, 6, 10, 1.1579],
+    ["Final Girl Core Box", 1, 1, 60, 2.7705],
+    // ["Flip 7", 3, 18, 20, 1.0415],
+    ["Green City", 2, 6, 45, 1.2],
+    ["Hawker Wars", 2, 4, 20, 1.2],
+    ["Horrified: Dungeons & Dragons", 1, 5, 60, 2.1667],
+    ["Hot Streak", 2, 99, 20, 1.2254],
+    ["HR: The Toxic Workplace Game", 2, 4, 30, 1],
+    ["Hues and Cues", 3, 10, 30, 1.0625],
+    ["I have The Numbers!", 3, 6, 30, null],
+    ["JinxO", 3, 7, 45, 1.05],
+    ["Jisogi: Anime Studio Tycoon", 1, 4, 120, 2.907],
+    ["King of Tokyo: Godzilla", 2, 6, 30, 1.6429],
+    ["Magical Athlete", 2, 6, 30, 1.1831],
+    ["The Malaysian Dream", 2, 6, 40, 1],
+    ["Marvel Dice Throne: Scarlet Witch v. Thor v. Loki v. Spider-Man", 2, 4, 40, 2.4286],
+    // ["Marvel Mayhem", 2, 4, 10, 1.4],
+    ["Modern Art", 3, 5, 45, 2.2749],
+    //["Monopoly Deal Pocket", 2, 5, 15, 1.2826],
+    ["Nak Makan Apa", 2, 10, 30, null],
+    ["Obscurio", 2, 8, 40, 1.9012],
+    ["One Piece: Luffy's Bento Panic", 3, 9, 45, 1.2],
+    ["Power Hungry Pets", 2, 6, 15, 1.1739],
+    ["Ready Set Bet", 2, 9, 60, 1.3403],
+    ["Rebirth", 2, 4, 60, 1.9819],
+    ["Robo Rally Transformers", 2, 6, 90, 2.3333],
+    ["Robot Quest Arena", 2, 4, 60, 2.1471],
+    ["Salami", 3, 6, 60, 1],
+    ["Sheriff of Nottingham: 2nd Edition", 3, 6, 60, 1.7065],
+    ["Spooktacular", 1, 5, 45, 2],
+    ["Survive The Island", 2, 5, 45, 1.4725],
+    ["Taikun", 2, 5, 60, null],
+    ["Thunder Road: Vendetta", 2, 4, 75, 1.948],
+    //["Timeline", 2, 8, 15, 1.1277],
+    //["Timeline: Games & Leisure", 2, 8, 15, 1],
+    ["Unmatched Adventures: Tales to Amaze", 1, 4, 60, 2.3375],
+    ["Unmatched Adventures: Teenage Mutant Ninja Turtles", 1, 4, 40, 2.3333],
+    ["The Vale of Eternity", 2, 4, 45, 2.1423]
+];
+
+
+/* =========================================
+   GAME DETAILS
+========================================= */
+
+const gameDetails = {
+    "12 Rivers": {
+        description:"A strategic river-themed game where players manage resources, develop their territory and make decisions to score the most points.",
+        mechanisms:["Tile Placement","Area Control","Resource Management"]
+    },
+    "Arkham Horror": {
+        description:"A cooperative horror adventure set in the world of H. P. Lovecraft. Investigators explore Arkham, fight monsters, close portals and prevent ancient horrors from entering the world.",
+        mechanisms:["Cooperative Game","Dice Rolling","Action Points","Variable Player Powers","Modular Board","Area Movement"]
+    },
+    "Batman: Gotham City Chronicles": {
+        description:"A tactical Batman adventure in which players take on missions as Batman and his allies, or control villains attempting to complete their own objectives.",
+        mechanisms:["Action Points","Dice Rolling","Variable Player Powers","Scenario-Based Gameplay","Area Movement","Team-Based Play"]
+    },
+    "Battle of Bomoh": {
+        description:"A Malaysian-themed elimination card game in which bomohs battle to become the last surviving shaman.",
+        mechanisms:["Player Elimination","Hand Management","Take That","Card Play"]
+    },
+    "Blood Rage": {
+        description:"A Viking strategy game set during Ragnarok. Players lead clans, recruit warriors, conquer territories and complete quests to earn glory before the world ends.",
+        mechanisms:["Area Control","Card Drafting","Area Majority","Variable Player Powers","Set Collection"]
+    },
+    "Camel Up (Second Edition)": {
+        description:"A lively camel-racing game where players bet on which camel will win or lose. Camels can stack on top of one another, making the race unpredictable.",
+        mechanisms:["Betting and Wagering","Dice Rolling","Push Your Luck","Variable Turn Order"]
+    },
+    "Comic Hunters": {
+        description:"A comic-book collecting game in which players build collections by acquiring comics and pursuing collection goals.",
+        mechanisms:["Set Collection","Card Drafting","Hand Management"]
+    },
+    "Critter Kitchen": {
+        description:"A competitive cooking game where animal chefs send their critters around the city to gather ingredients, prepare dishes and impress food critics.",
+        mechanisms:["Worker Placement","Simultaneous Action Selection","Hidden Information","Resource Management","Set Collection"]
+    },
+    "Cubitos": {
+        description:"A racing game where players build and roll a personal pool of dice to move along the track. Players acquire new dice with special abilities to improve their racing strategy.",
+        mechanisms:["Dice Rolling","Dice Pool Building","Deck Building","Push Your Luck","Race"]
+    },
+    "DCeased: Gotham City Outbreak": {
+        description:"A cooperative superhero game inspired by DCeased. Players control DC heroes who work together to fight infected enemies and survive an outbreak in Gotham City.",
+        mechanisms:["Cooperative Game","Dice Rolling","Variable Player Powers","Modular Board","Scenario-Based Gameplay"]
+    },
+    "Dead of Winter: The Long Night": {
+        description:"A survival game set during a zombie apocalypse. Players manage a colony, search for supplies and fight zombies while pursuing shared and secret personal objectives.",
+        mechanisms:["Semi-Cooperative Game","Hidden Roles","Dice Rolling","Worker Placement","Hand Management","Storytelling"]
+    },
+    "Drillers": {
+        description:"Players pilot mining mechs into an abandoned underground mine, exploring for valuable minerals and managing their machines as they drill deeper.",
+        mechanisms:["Deck Building","Hand Management","Multi-Use Cards","Area Movement","Resource Management"]
+    },
+    "Dungeon Mayhem": {
+        description:"A fast fantasy card game where Dungeons & Dragons characters battle using character-specific cards and abilities. Be the last adventurer standing.",
+        mechanisms:["Player Elimination","Hand Management","Take That","Variable Player Powers"]
+    },
+    "Dungeon Mayhem: Battle for Baldur's Gate": {
+        description:"An expanded Dungeon Mayhem card battle featuring additional characters and abilities. Attack rivals, defend yourself and try to survive until the end.",
+        mechanisms:["Player Elimination","Hand Management","Take That","Variable Player Powers"]
+    },
+    "Dungeon Mayhem: Monster Madness": {
+        description:"A larger Dungeon Mayhem experience featuring more characters and monsters. Use powerful cards and special abilities to eliminate your opponents.",
+        mechanisms:["Player Elimination","Hand Management","Take That","Variable Player Powers"]
+    },
+    "Final Girl Core Box": {
+        description:"A solo horror survival game inspired by slasher movies. Play as the final girl, survive a killer, rescue victims and defeat the murderer before becoming the next victim.",
+        mechanisms:["Solo Game","Dice Rolling","Action Points","Push Your Luck","Hand Management","Modular Board"]
+    },
+    "Flip 7": {
+        description:"A push-your-luck card game where players draw numbered cards without repeating a number. Keep drawing for more points or stop before you bust.",
+        mechanisms:["Push Your Luck","Hand Management","Set Collection"]
+    },
+    "Green City": {
+        description:"A light city-building game where players develop a greener city by arranging developments and making choices to create an efficient and attractive urban environment.",
+        mechanisms:["Tile Placement","Set Collection","Spatial Puzzle","Pattern Building"]
+    },
+    "Hawker Wars": {
+        description:"A Malaysian hawker-themed competitive game where players compete to build a successful food business and outplay rival vendors.",
+        mechanisms:["Hand Management","Set Collection","Take That","Card Play"]
+    },
+    "Horrified: Dungeons & Dragons": {
+        description:"A cooperative adventure in which players become heroes protecting a village from Dungeons & Dragons monsters. Collect items, complete objectives and defeat the monsters together.",
+        mechanisms:["Cooperative Game","Action Points","Set Collection","Variable Player Powers","Pick-up and Deliver"]
+    },
+    "Hot Streak": {
+        description:"A chaotic racing and betting party game. Players wager on unpredictable racers and try to predict the outcome as the race unfolds.",
+        mechanisms:["Betting and Wagering","Push Your Luck","Race","Dice Rolling"]
+    },
+    "HR: The Toxic Workplace Game": {
+        description:"A humorous workplace-themed game about navigating office politics, difficult colleagues and corporate challenges while trying to come out on top.",
+        mechanisms:["Hand Management","Take That","Negotiation","Set Collection"]
+    },
+    "Hues and Cues": {
+        description:"A colourful party game where one player gives a word clue to help others identify a specific colour on the board.",
+        mechanisms:["Deduction","Pattern Recognition","Communication Limits","Party Game"]
+    },
+    "I have The Numbers!": {
+        description:"A number-focused party card game involving claims, challenges and attempts to collect target cards. Players must decide whether to trust or challenge what others say.",
+        mechanisms:["Bluffing","Hand Management","Set Collection","Push Your Luck","Take That"]
+    },
+    "JinxO": {
+        description:"A competitive word-association party game where players try to give answers that match other players.",
+        mechanisms:["Simultaneous Action Selection","Word Association","Paper-and-Pencil","Pattern Recognition","Party Game"]
+    },
+    "Jisogi: Anime Studio Tycoon": {
+        description:"A strategic anime studio management game. Hire staff, manage expenses, develop anime projects and respond to market trends to build a successful studio.",
+        mechanisms:["Worker Placement","Engine Building","Resource Management","Contracts","Set Collection","Hand Management"]
+    },
+    "King of Tokyo: Godzilla": {
+        description:"A monster battle game where players control giant creatures fighting for dominance. Roll dice to attack rivals, heal, collect energy and earn victory points.",
+        mechanisms:["Dice Rolling","Push Your Luck","Player Elimination","Variable Player Powers","Area Control"]
+    },
+    "Magical Athlete": {
+        description:"A chaotic fantasy racing game where players choose characters with unusual special abilities that can dramatically change the course of a race.",
+        mechanisms:["Race","Variable Player Powers","Roll and Move"]
+    },
+    "The Malaysian Dream": {
+        description:"A Malaysian-themed game inspired by local life and aspirations. Players face challenges and opportunities as they work towards achieving their version of the Malaysian Dream.",
+        mechanisms:["Card Play","Hand Management","Set Collection","Take That"]
+    },
+    "Marvel Dice Throne: Scarlet Witch v. Thor v. Loki v. Spider-Man": {
+        description:"A tactical Marvel dice-combat game where iconic heroes and villains battle using custom dice, character-specific abilities and action cards.",
+        mechanisms:["Dice Rolling","Variable Player Powers","Hand Management","Take That"]
+    },
+    "Marvel Mayhem": {
+        description:"A quick Marvel card battle where players control superheroes, use their unique abilities and try to be the last hero standing.",
+        mechanisms:["Player Elimination","Hand Management","Take That","Variable Player Powers"]
+    },
+    "Modern Art": {
+        description:"An auction game where players act as art dealers buying and selling paintings. They try to predict which artists will become popular and earn the most money from their collections.",
+        mechanisms:["Auction and Bidding","Market","Set Collection","Stock Holding"]
+    },
+    "Monopoly Deal Pocket": {
+        description:"A fast card-game version of Monopoly. Collect property sets, charge rent and use action cards to steal or disrupt opponents' properties. Complete three property sets to win.",
+        mechanisms:["Set Collection","Hand Management","Take That","Card Play"]
+    },
+    "Nak Makan Apa": {
+        description:"A Malaysian food-themed party game about deciding what to eat. Players use food-related cards and try to make choices that suit the situation and outplay others.",
+        mechanisms:["Set Collection","Hand Management","Take That","Card Play"]
+    },
+    "Obscurio": {
+        description:"A deduction game with a hidden traitor. Players interpret visual clues from a grimoire to find the correct image and escape a magical library.",
+        mechanisms:["Cooperative Game","Hidden Roles","Deduction","Communication Limits","Pattern Recognition"]
+    },
+    "One Piece: Luffy's Bento Panic": {
+        description:"A One Piece party game in which players compete to collect food and fill their bento boxes before the food is taken by other players.",
+        mechanisms:["Set Collection","Take That","Variable Player Powers"]
+    },
+    "Power Hungry Pets": {
+        description:"A quick card game where players use animal characters with special abilities to compete for power. Manage your cards and outsmart opponents to win.",
+        mechanisms:["Hand Management","Card Drafting","Take That","Variable Player Powers"]
+    },
+    "Ready Set Bet": {
+        description:"A real-time horse-racing betting game. Players place bets while the race is happening and try to predict which horses will finish in winning positions.",
+        mechanisms:["Betting and Wagering","Real-Time","Dice Rolling","Push Your Luck"]
+    },
+    "Rebirth": {
+        description:"A tile-laying strategy game set in a post-apocalyptic Scotland and Ireland. Players rebuild the land, develop settlements and compete for control of important regions.",
+        mechanisms:["Tile Placement","Area Majority","Network Building","Territory Building"]
+    },
+    "Robo Rally Transformers": {
+        description:"A robot racing game featuring Transformers characters. Program movement cards to navigate dangerous factory environments, avoid hazards and reach objectives.",
+        mechanisms:["Action Programming","Grid Movement","Race","Simultaneous Action Selection","Modular Board"]
+    },
+    "Robot Quest Arena": {
+        description:"A robot combat game where players build and upgrade their robot decks, move around an arena and fight opponents using attacks, gadgets and special abilities.",
+        mechanisms:["Deck Building","Grid Movement","Hand Management","Variable Player Powers"]
+    },
+    "Sheriff of Nottingham: 2nd Edition": {
+        description:"A bluffing game where merchants try to smuggle goods into Nottingham's market. The Sheriff decides whether to inspect their bags or accept bribes and let them pass.",
+        mechanisms:["Bluffing","Negotiation","Hand Management","Set Collection","Push Your Luck"]
+    },
+    "Spooktacular": {
+        description:"A spooky-themed game in which players face supernatural challenges and eerie encounters while trying to complete objectives and score points.",
+        mechanisms:["Set Collection","Hand Management","Push Your Luck","Variable Player Powers"]
+    },
+    "Survive The Island": {
+        description:"A survival game where players try to evacuate explorers from a sinking island before it disappears underwater. Avoid sea monsters, sharks and other dangers while saving survivors.",
+        mechanisms:["Player Elimination","Area Movement","Tile Placement","Take That","Push Your Luck"]
+    },
+    "Taikun": {
+        description:"A competitive business and economic game where players aim to build wealth through strategic decisions, trading and managing opportunities.",
+        mechanisms:["Economic Strategy","Resource Management","Negotiation","Trading"]
+    },
+    "Thunder Road: Vendetta": {
+        description:"A chaotic post-apocalyptic car-combat game. Race across dangerous roads, shoot rival vehicles, avoid obstacles and try to keep your cars running.",
+        mechanisms:["Dice Rolling","Race","Take That","Modular Board","Area Movement"]
+    },
+    "Timeline": {
+        description:"A historical knowledge card game where players place events in chronological order by deciding whether each event happened before or after the others.",
+        mechanisms:["Deduction","Card Placement","Knowledge","Ordering"]
+    },
+    "Timeline: Games & Leisure": {
+        description:"A Timeline edition focused on games, hobbies and leisure. Players arrange inventions, events and milestones in the correct chronological order.",
+        mechanisms:["Deduction","Card Placement","Knowledge","Ordering"]
+    },
+    "Unmatched Adventures: Tales to Amaze": {
+        description:"A cooperative Unmatched game where players team up as heroes to defeat powerful villains and their minions. Each hero has unique cards and abilities that reward tactical planning.",
+        mechanisms:["Cooperative Game","Hand Management","Variable Player Powers","Area Movement","Deck Construction"]
+    },
+    "Unmatched Adventures: Teenage Mutant Ninja Turtles": {
+        description:"A cooperative adventure featuring the Teenage Mutant Ninja Turtles. Players work together to fight villains, complete objectives and use each turtle's unique abilities.",
+        mechanisms:["Cooperative Game","Hand Management","Variable Player Powers","Area Movement","Deck Construction"]
+    },
+    "Buffet Boss": {
+    description:"A fun food-stacking game where players choose food from a buffet and carefully stack it onto their plates. Score points from the food you manage to keep balanced, while using character cards to earn bonus points.",
+    mechanisms:["Open Drafting","Stacking and Balancing","Variable Player Powers"]
+    },
+    "Salami": {
+        description:"A fast-paced party game set in a lively tavern. Players act as sneaky adventurers trying to grab as many salami slices as possible without getting caught by the tavern keeper. The game combines real-time action with physical dexterity.",
+        mechanisms:["Push Your Luck","Action Timer","Auction: Dexterity","Real-Time"]
+    },
+    "The Vale of Eternity": {
+        description:"A fantasy card game where players become tamers of mythical creatures. Collect and summon creatures with powerful abilities to build an engine and score points.",
+        mechanisms:["Card Drafting","Engine Building","Set Collection","Hand Management","Resource Management"]
+    }
+    
+};
+
+
+const gameWinConditions = {
+    "12 Rivers":"Earn the most points by managing resources and developing your river area.",
+    "Arkham Horror":"Work together to investigate supernatural mysteries, complete scenario objectives, and stop the Ancient Ones before evil overwhelms the city.",
+    "Batman: Gotham City Chronicles":"Complete scenario objectives by fighting enemies, controlling zones, and surviving missions as Batman’s team or the villain side.",
+    "Battle of Bomoh":"Avoid \"terciduk\" and be the last player remaining.",
+    "Blood Rage":"Earn the most Glory by winning battles, pillaging territories, completing quests, and gaining rewards across three Ages.",
+    "Buffet Boss":"Build the tallest food stack without knocking it over and earn the most points from food cards and character bonuses.",
+    "Camel Up (Second Edition)":"Earn the most money by correctly betting on racing camels.",
+    "Comic Hunters":"Collect valuable comics and score the most points.",
+    "Critter Kitchen":"Prepare the best meals and earn the most points.",
+    "Cubitos":"Be the first to cross the finish line by rolling dice, buying stronger dice, and managing risk.",
+    "DCeased: Gotham City Outbreak":"Work together to complete mission objectives, defeat zombie enemies, and rescue bystanders before all Super Heroes are eliminated.",
+    "Dead of Winter: The Long Night":"Work together to survive the zombie winter but don’t trust everyone.",
+    "Drillers":"Explore the abandoned mine, collect valuable minerals, upgrade your drilling machines, and earn the most points.",
+    "Dungeon Mayhem":"Eliminate other players and survive the battle.",
+    "Dungeon Mayhem: Battle for Baldur's Gate":"Eliminate other players and survive the battle.",
+    "Dungeon Mayhem: Monster Madness":"Eliminate other players and survive the battle.",
+    "Final Girl Core Box":"Defeat the killer and survive the horror scenario.",
+    "Flip 7":"Reach the target score before the other players.",
+    "Green City":"Build an efficient shared transport network, connect commuters, and earn the most Victory Points while avoiding penalties for stranded riders.",
+    "Hawker Wars":"Cook the most exciting hawker dishes while sabotaging your competition",
+    "Horrified: Dungeons & Dragons":"Work together to defeat all the monsters using their unique weaknesses before the Terror Level reaches its maximum.",
+    "Hot Streak":"Predict outcomes correctly to collect the most cash.",
+    "HR: The Toxic Workplace Game":"Be the best Manager by getting everyone else fired with the powers of HR!!",
+    "Hues and Cues":"Give and guess colour clues accurately to earn the most points.",
+    "I have The Numbers!":"Guess numbers accurately to earn the most points.",
+    "JinxO":"Write answers that match exactly one other player's answers to score bonus points and earn the highest total score.",
+    "Jisogi: Anime Studio Tycoon":"Build a successful anime studio by producing anime, managing staff and resources, and earning the most Reputation Points.",
+    "King of Tokyo: Godzilla":"Be the first player to reach 20 victory points or be the last monster standing.",
+    "Magical Athlete":"Reach the finish line first using your character’s abilities.",
+    "Marvel Dice Throne: Scarlet Witch v. Thor v. Loki v. Spider-Man":"Reduce your opponents’ health to zero.",
+    "Modern Art":"Buy and sell paintings strategically through auctions and finish with the most money after four rounds.",
+    "Monopoly Deal Pocket":"Complete three property sets before anyone else.",
+    "Nak Makan Apa":"Collect the best food combinations to score points.",
+    "Obscurio":"Help the Wizards escape the library using picture clues, or secretly mislead them as the Traitor to make them lose.",
+    "One Piece: Luffy's Bento Panic":"Collect your favourite food tokens and fill your bento box before other players or Luffy steal your food.",
+    "Power Hungry Pets":"Use your animalistic powers and the player with the highest number card wins.",
+    "Ready Set Bet":"Place bets on horse races and use your predictions to earn the most money after four races.",
+    "Rebirth":"Build the strongest civilization and earn the most points.",
+    "Robo Rally Transformers":"Program your Transformer to navigate the racecourse, overcome obstacles, and reach the final checkpoint before your opponents.",
+    "Robot Quest Arena":"Upgrade your robot, battle opponents, and score the most points in the arena.",
+    "Salami":"Steal as many salami slices as possible without getting caught by the tavern keeper.",
+    "Sheriff of Nottingham: 2nd Edition":"Earn the most gold by sneaking goods, bluffing, bribing, and catching lies.",
+    "Spooktacular":"Collect the most Spook Points before the game ends.",
+    "Survive The Island":"Rescue your explorers and score the most points.",
+    "Taikun":"Play as a tycoon building your dream football team.",
+    "The Malaysian Dream":"Build a successful life and achieve the most successful dream's points.",
+    "Thunder Road: Vendetta":"Be the first player to move one of your cars across the finish line or be the last player with cars remaining.",
+    "The Vale of Eternity":"Capture powerful creatures and score the most points.",
+    "Unmatched Adventures: Tales to Amaze":"Defeat your enemies using teamwork and unique abilities.",
+    "Unmatched Adventures: Teenage Mutant Ninja Turtles":"Defeat your enemies using teamwork and unique abilities."
+};
+
+
+/* =========================================
+   BOARD GAME CATEGORIES
+========================================= */
+
+const gameCategories = {
+    "12 Rivers": ["Strategy", "Tile Placement"],
+    "Arkham Horror": ["Cooperative", "Horror", "Adventure"],
+    "Batman: Gotham City Chronicles": ["Strategy", "Adventure", "Miniatures"],
+    "Battle of Bomoh": ["Card Game", "Party Game", "Take That"],
+    "Blood Rage": ["Strategy", "Area Control", "Mythology"],
+    "Camel Up (Second Edition)": ["Family", "Racing", "Betting"],
+    "Comic Hunters": ["Card Game", "Collection", "Strategy"],
+    "Critter Kitchen": ["Strategy", "Worker Placement", "Family"],
+    "Cubitos": ["Racing", "Dice Game", "Strategy"],
+    "DCeased: Gotham City Outbreak": ["Cooperative", "Horror", "Adventure"],
+    "Dead of Winter: The Long Night": ["Cooperative", "Survival", "Horror"],
+    "Drillers": ["Strategy", "Deck Building", "Adventure"],
+    "Dungeon Mayhem": ["Card Game", "Fantasy", "Party Game"],
+    "Dungeon Mayhem: Battle for Baldur's Gate": ["Card Game", "Fantasy", "Party Game"],
+    "Dungeon Mayhem: Monster Madness": ["Card Game", "Fantasy", "Party Game"],
+    "Final Girl Core Box": ["Solo", "Horror", "Survival"],
+    "Flip 7": ["Card Game", "Party Game", "Push Your Luck"],
+    "Green City": ["Strategy", "Tile Placement", "Family"],
+    "Hawker Wars": ["Card Game", "Party Game", "Malaysian"],
+    "Horrified: Dungeons & Dragons": ["Cooperative", "Fantasy", "Adventure"],
+    "Hot Streak": ["Party Game", "Racing", "Betting"],
+    "HR: The Toxic Workplace Game": ["Party Game", "Card Game", "Humour"],
+    "Hues and Cues": ["Party Game", "Family", "Word Game"],
+    "I have The Numbers!": ["Card Game", "Party Game", "Bluffing"],
+    "JinxO": ["Party Game", "Word Game", "Social"],
+    "Jisogi: Anime Studio Tycoon": ["Strategy", "Economic", "Worker Placement"],
+    "King of Tokyo: Godzilla": ["Dice Game", "Fighting", "Family"],
+    "Magical Athlete": ["Racing", "Family", "Party Game"],
+    "The Malaysian Dream": ["Card Game", "Party Game", "Malaysian"],
+    "Marvel Dice Throne: Scarlet Witch v. Thor v. Loki v. Spider-Man": ["Dice Game", "Fighting", "Card Game"],
+    "Marvel Mayhem": ["Card Game", "Fighting", "Party Game"],
+    "Modern Art": ["Strategy", "Auction", "Economic"],
+    "Monopoly Deal Pocket": ["Card Game", "Family", "Take That"],
+    "Nak Makan Apa": ["Card Game", "Party Game", "Malaysian"],
+    "Obscurio": ["Cooperative", "Deduction", "Horror"],
+    "One Piece: Luffy's Bento Panic": ["Card Game", "Party Game", "Family"],
+    "Power Hungry Pets": ["Card Game", "Party Game", "Take That"],
+    "Ready Set Bet": ["Party Game", "Racing", "Betting"],
+    "Rebirth": ["Strategy", "Tile Placement", "Area Control"],
+    "Robo Rally Transformers": ["Racing", "Programming", "Strategy"],
+    "Robot Quest Arena": ["Strategy", "Fighting", "Deck Building"],
+    "Sheriff of Nottingham: 2nd Edition": ["Card Game", "Bluffing", "Party Game"],
+    "Spooktacular": ["Family", "Card Game", "Fantasy"],
+    "Survive The Island": ["Family", "Survival", "Adventure"],
+    "Taikun": ["Strategy", "Economic", "Trading"],
+    "Thunder Road: Vendetta": ["Racing", "Fighting", "Strategy"],
+    "Timeline": ["Card Game", "Trivia", "Family"],
+    "Timeline: Games & Leisure": ["Card Game", "Trivia", "Family"],
+    "Unmatched Adventures: Tales to Amaze": ["Cooperative", "Adventure", "Fighting"],
+    "Unmatched Adventures: Teenage Mutant Ninja Turtles": ["Cooperative", "Adventure", "Fighting"],
+    "Buffet Boss": ["Family", "Party Game", "Dexterity"],
+    "Salami": ["Party Game", "Real-Time", "Dexterity"],
+    "The Vale of Eternity": ["Strategy", "Fantasy", "Card Game"]
+};
+
+
+/* =========================================
+   COVER COLORS
+========================================= */
+
+const coverColors = [
+    "linear-gradient(135deg,#b56b39,#e0b46c,#587b59)",
+    "linear-gradient(135deg,#294c68,#5485a0,#d2a15b)",
+    "linear-gradient(135deg,#496d56,#8ca879,#d5bd85)",
+    "linear-gradient(135deg,#174c70,#328eaa,#d9a64c)",
+    "linear-gradient(135deg,#6c3944,#b65e58,#d9b77c)",
+    "linear-gradient(135deg,#62794a,#a5a66a,#b77c4e)",
+    "linear-gradient(135deg,#54416e,#9174a2,#d7ae69)",
+    "linear-gradient(135deg,#343844,#686d7b,#a18b68)"
+];
+
+const coverImages = {
+    "12 Rivers":"img/12 rivers.png",
+    "Arkham Horror":"img/Arkham Horror.png",
+    "Batman: Gotham City Chronicles":"img/batman chronicles.png",
+    "Battle of Bomoh":"img/battle of bomoh.png",
+    "Blood Rage":"img/Blood Rage.png",
+    "Buffet Boss":"img/buffet boss.png",
+    "Camel Up (Second Edition)":"img/camel up.png",
+    "Comic Hunters":"img/comic hunters.png",
+    "Critter Kitchen":"img/critter kitchen.png",
+    "Cubitos":"img/cubitos.png",
+    "DCeased: Gotham City Outbreak":"img/DCeased Gotham City Outbreak.png",
+    "Dead of Winter: The Long Night":"img/dead of winter long night.png",
+    "Drillers":"img/Drillers.png",
+    "Final Girl Core Box":"img/final girl.png",
+    "Green City":"img/Green City.png",
+    "Hawker Wars":"img/hawkers wars.png",
+    "Horrified: Dungeons & Dragons":"img/horrified.png",
+    "Hot Streak":"img/hot streak.png",
+    "Hues and Cues":"img/hues and cues.png",
+    "HR: The Toxic Workplace Game":"img/HR The Toxic Workplace Game.png",
+    "I have The Numbers!":"img/i have the numbers.png",
+    "JinxO":"img/JinxO.png",
+    "Jisogi: Anime Studio Tycoon":"img/Jisogi.png",
+    "King of Tokyo: Godzilla":"img/king of tokyo godzilla.png",
+    "Magical Athlete":"img/magical athlete.png",
+    "Modern Art":"img/Modern Art.png",
+    "The Malaysian Dream":"img/The Malaysian Dream.png",
+    "Marvel Dice Throne: Scarlet Witch v. Thor v. Loki v. Spider-Man":"img/dice throne.png",
+    "Nak Makan Apa":"img/nak makan apa.png",
+    "Obscurio":"img/Obscurio.png",
+    "One Piece: Luffy's Bento Panic":"img/One Piece Luffy's Bento Panic.png",
+    "Power Hungry Pets":"img/power hungry pets.png",
+    "Ready Set Bet":"img/Ready Set Bet.png",
+    "Rebirth":"img/rebirth.png",
+    "Robo Rally Transformers":"img/robo rally.png",
+    "Robot Quest Arena":"img/Robot Quest Arena.png",
+    "Salami":"img/salami.png",
+    "Sheriff of Nottingham: 2nd Edition":"img/sheriff of nottingham.png",
+    "Spooktacular":"img/Spooktacular.png",
+    "Survive The Island":"img/survive the island.png",
+    "Taikun":"img/taikun.png",
+    "Thunder Road: Vendetta":"img/Thunder Road Vendetta.png",
+    "The Vale of Eternity":"img/The Vale of Eternity.png",
+    "Unmatched Adventures: Tales to Amaze":"img/Unmatched Adventures Tales to Amaze.png",
+    "Unmatched Adventures: Teenage Mutant Ninja Turtles":"img/Unmatched Adventures Teenage Mutant Ninja Turtles.png"
+};
+
+
+/* =========================================
+   CONVERT COLLECTION RECORDS TO GAME OBJECTS
+========================================= */
+
+const games = collectionRecords.map(
+    ([title, minPlayers, maxPlayers, time, complexity], index) => {
+
+        return {
+            id:index + 1,
+            title,
+            minPlayers,
+            maxPlayers,
+            time,
+            complexity,
+            category:gameCategories[title] || ["Board Game"],
+            details:gameDetails[title] || {
+                description:"Game description will be updated.",
+                mechanisms:["Board Game"]
+            },
+            cover:coverColors[index % coverColors.length],
+            image:coverImages[title]
+        };
+
+    }
+);
+
+
+/* =========================================
+   THEME MODE
+========================================= */
+
+function applyTheme(theme) {
+
+    document.documentElement.setAttribute("data-theme",theme);
+
+    document.getElementById("themeIcon").textContent =
+        theme === "dark" ? "☀️" : "🌙";
+
+    document.getElementById("themeText").textContent =
+        theme === "dark" ? "Light Mode" : "Dark Mode";
+
+    localStorage.setItem("boardgame-theme",theme);
+}
+
+function toggleTheme() {
+
+    const current =
+        document.documentElement.getAttribute("data-theme") || "light";
+
+    applyTheme(current === "light" ? "dark" : "light");
+}
+
+applyTheme(localStorage.getItem("boardgame-theme") || "light");
+
+
+/* =========================================
+   FORMAT DATA
+========================================= */
+
+function formatPlayers(game) {
+    return game.minPlayers === game.maxPlayers
+        ? `${game.minPlayers} Player${game.minPlayers > 1 ? "s" : ""}`
+        : `${game.minPlayers}-${game.maxPlayers}`;
+}
+
+function formatTime(game) {
+    return `${game.time} min`;
+}
+
+function formatComplexity(game) {
+    if (game.complexity === null) return "N/A";
+    if (game.complexity <= 2) return "Light";
+    if (game.complexity <= 3) return "Medium";
+    return "Heavy";
+}
+
+
+/* =========================================
+   DISPLAY GAMES
+========================================= */
+
+function displayGames(data) {
+
+    const grid = document.getElementById("gameGrid");
+
+    grid.innerHTML = "";
+
+    document.getElementById("gameCount").textContent =
+        `${data.length} of ${games.length} Games`;
+
+    document.getElementById("noResults").style.display =
+        data.length === 0 ? "block" : "none";
+
+    data.forEach(game => {
+
+        const card = document.createElement("div");
+
+        card.className = "game-card";
+
+        const image = document.createElement("div");
+        image.className = "game-image";
+        image.style.background = game.image ? "#fff" : game.cover;
+
+        const placeholder = document.createElement("div");
+        placeholder.className = "cover-placeholder";
+
+        const coverName = document.createElement("span");
+        coverName.className = "cover-name";
+        coverName.textContent = game.title;
+
+        const coverCaption = document.createElement("small");
+        coverCaption.textContent = "BOARD GAME COLLECTION";
+
+        placeholder.append(coverName,coverCaption);
+
+        if (game.image) {
+            const coverImage = document.createElement("img");
+            coverImage.src = game.image;
+            coverImage.alt = `${game.title} cover`;
+            coverImage.onerror = () => {
+                coverImage.remove();
+                image.appendChild(placeholder);
+            };
+            image.appendChild(coverImage);
+        } else {
+            image.appendChild(placeholder);
+        }
+
+        const category = document.createElement("span");
+        category.className = "category-tag";
+        category.textContent = game.category[0];
+        image.appendChild(category);
+
+        const info = document.createElement("div");
+        info.className = "game-info";
+
+        const title = document.createElement("h3");
+        title.textContent = game.title;
+
+        const categoryTags = document.createElement("div");
+        categoryTags.className = "category-tags";
+
+        game.category.forEach(cat => {
+
+            const pill = document.createElement("span");
+            pill.className = "category-pill";
+            pill.textContent = cat;
+
+            categoryTags.appendChild(pill);
+
+        });
+
+        const stats = document.createElement("div");
+        stats.className = "game-stats";
+
+        const statData = [
+            ["Players",formatPlayers(game)],
+            ["Playtime",formatTime(game)],
+            ["Difficulty",formatComplexity(game)]
+        ];
+
+        statData.forEach(([label,value],index) => {
+
+            const stat = document.createElement("div");
+            stat.className = "stat";
+
+            const statLabel = document.createElement("span");
+            statLabel.className = "stat-label";
+            statLabel.textContent = label;
+
+            const statValue = document.createElement("span");
+            statValue.className =
+                "stat-value" + (index === 2 ? " complexity" : "");
+            statValue.textContent = value;
+
+            stat.append(statLabel,statValue);
+            stats.appendChild(stat);
+
+        });
+
+        info.append(title,categoryTags,stats);
+        card.append(image,info);
+
+        card.onclick = () => showDetails(game.id);
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================
+   FILTER GAMES
+========================================= */
+
+function filterGames() {
+
+    const search =
+        document.getElementById("searchInput").value.toLowerCase().trim();
+
+    const players =
+        document.getElementById("playerFilter").value;
+
+    const time =
+        document.getElementById("timeFilter").value;
+
+    const complexity =
+        document.getElementById("complexityFilter").value;
+
+    const filtered = games.filter(game => {
+
+        const matchSearch =
+            game.title.toLowerCase().includes(search) ||
+            game.details.description.toLowerCase().includes(search) ||
+            game.details.mechanisms.some(m => m.toLowerCase().includes(search));
+
+        let matchPlayers = true;
+
+        if (players) {
+            const required = Number(players);
+
+            matchPlayers =
+                game.minPlayers <= required &&
+                game.maxPlayers >= required;
+        }
+
+        let matchTime = true;
+
+        if (time === "30")
+            matchTime = game.time <= 30;
+
+        if (time === "60")
+            matchTime = game.time > 30 && game.time <= 60;
+
+        if (time === "90")
+            matchTime = game.time > 60 && game.time <= 90;
+
+        if (time === "91")
+            matchTime = game.time > 90;
+
+        let matchComplexity = true;
+
+        if (complexity === "na")
+            matchComplexity = game.complexity === null;
+
+        if (complexity === "1")
+            matchComplexity =
+                game.complexity !== null &&
+                game.complexity <= 2;
+
+        if (complexity === "2")
+            matchComplexity =
+                game.complexity !== null &&
+                game.complexity > 2 &&
+                game.complexity <= 3;
+
+        if (complexity === "3")
+            matchComplexity =
+                game.complexity !== null &&
+                game.complexity > 3;
+
+        return matchSearch &&
+               matchPlayers &&
+               matchTime &&
+               matchComplexity;
+
+    });
+
+    displayGames(filtered);
+}
+
+
+/* =========================================
+   GAME DETAILS MODAL
+========================================= */
+
+function showDetails(id) {
+
+    const game = games.find(g => g.id === id);
+
+    if (!game) return;
+
+    const modalImage = document.getElementById("modalImage");
+
+    modalImage.style.background = game.image ? "#fff" : game.cover;
+    modalImage.innerHTML = "";
+
+    if (game.image) {
+        const coverImage = document.createElement("img");
+        coverImage.src = game.image;
+        coverImage.alt = `${game.title} cover`;
+        coverImage.onerror = () => {
+            coverImage.remove();
+            modalImage.textContent = game.title;
+        };
+        modalImage.appendChild(coverImage);
+    } else {
+        modalImage.textContent = game.title;
+    }
+
+    document.getElementById("modalTitle").textContent =
+        game.title;
+
+    const modalCategory = document.getElementById("modalCategory");
+
+    modalCategory.innerHTML = "";
+
+    game.category.forEach(cat => {
+
+        const pill = document.createElement("span");
+        pill.className = "modal-category";
+        pill.textContent = cat;
+
+        modalCategory.appendChild(pill);
+
+    });
+
+    document.getElementById("modalPlayers").textContent =
+        formatPlayers(game);
+
+    document.getElementById("modalTime").textContent =
+        formatTime(game);
+
+    document.getElementById("modalComplexity").textContent =
+        formatComplexity(game);
+
+    const winCondition = gameWinConditions[game.title];
+    document.getElementById("modalWinSection").hidden = !winCondition;
+    if (winCondition) {
+        document.getElementById("modalWin").textContent = winCondition;
+    }
+
+    const mechanics =
+        document.getElementById("modalMechanics");
+
+    mechanics.innerHTML = "";
+
+    game.details.mechanisms.forEach(mechanic => {
+
+        const tag = document.createElement("span");
+        tag.className = "mechanic-tag";
+        tag.textContent = mechanic;
+
+        mechanics.appendChild(tag);
+
+    });
+
+    document.getElementById("gameModal").classList.add("active");
+
+    document.body.style.overflow = "hidden";
+}
+
+
+/* =========================================
+   CLOSE MODAL
+========================================= */
+
+function closeModal() {
+
+    document.getElementById("gameModal").classList.remove("active");
+
+    document.body.style.overflow = "";
+}
+
+function closeOutside(event) {
+
+    if (event.target.id === "gameModal") {
+        closeModal();
+    }
+}
+
+document.addEventListener("keydown",event => {
+
+    if (event.key === "Escape") {
+        closeModal();
+    }
+
+});
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+displayGames(games);
+
+</script>
+
+</body>
+</html>
