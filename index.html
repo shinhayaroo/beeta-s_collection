@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,21 +83,6 @@ header {
     color:var(--muted);
     font-size:11px;
     letter-spacing:1px;
-}
-
-.theme-toggle {
-    padding:9px 14px;
-    border-radius:25px;
-    background:var(--card);
-    border:1px solid var(--border);
-    color:var(--text);
-    cursor:pointer;
-    font-size:13px;
-    font-weight:600;
-}
-
-.theme-toggle:hover {
-    border-color:var(--primary);
 }
 
 .hero {
@@ -535,7 +520,6 @@ footer {
     .game-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
     .game-image {height:150px}
     .logo {font-size:18px}
-    .theme-toggle {font-size:11px;padding:8px}
 }
 
 </style>
@@ -548,11 +532,6 @@ footer {
 
     <div class="header-right">
         <div class="header-label">DISCOVER · CHOOSE · PLAY</div>
-
-        <button class="theme-toggle" onclick="toggleTheme()">
-            <span id="themeIcon">🌙</span>
-            <span id="themeText">Dark Mode</span>
-        </button>
     </div>
 </header>
 
@@ -1160,31 +1139,10 @@ const games = collectionRecords.map(
 
 
 /* =========================================
-   THEME MODE
+   THEME MODE (dark only)
 ========================================= */
 
-function applyTheme(theme) {
-
-    document.documentElement.setAttribute("data-theme",theme);
-
-    document.getElementById("themeIcon").textContent =
-        theme === "dark" ? "☀️" : "🌙";
-
-    document.getElementById("themeText").textContent =
-        theme === "dark" ? "Light Mode" : "Dark Mode";
-
-    localStorage.setItem("boardgame-theme",theme);
-}
-
-function toggleTheme() {
-
-    const current =
-        document.documentElement.getAttribute("data-theme") || "light";
-
-    applyTheme(current === "light" ? "dark" : "light");
-}
-
-applyTheme(localStorage.getItem("boardgame-theme") || "light");
+document.documentElement.setAttribute("data-theme","dark");
 
 
 /* =========================================
