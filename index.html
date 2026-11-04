@@ -325,24 +325,14 @@ header {
 
 /* YOUTUBE */
 
-.modal-title-row {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.modal-title-row h2 {
-    margin:0;
-}
-
 .youtube-btn {
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    flex-shrink:0;
-    width:30px;
-    height:30px;
+    vertical-align:middle;
+    margin-left:8px;
+    width:24px;
+    height:24px;
     padding:0;
     border:0;
     border-radius:50%;
@@ -354,7 +344,7 @@ header {
 
 .youtube-btn:hover {transform:scale(1.08)}
 .youtube-btn[hidden] {display:none}
-.youtube-btn svg {width:16px;height:16px;fill:currentColor}
+.youtube-btn svg {width:13px;height:13px;fill:currentColor}
 
 .video-modal {
     position:fixed;
@@ -683,13 +673,12 @@ footer {
 
             <div class="modal-category-list" id="modalCategory"></div>
 
-            <div class="modal-title-row">
-                <h2 id="modalTitle"></h2>
-                <button class="youtube-btn" id="youtubeBtn" type="button" hidden
+            <h2 id="modalTitle">
+                <span id="modalTitleText"></span><button class="youtube-btn" id="youtubeBtn" type="button" hidden
                         onclick="openVideo()" aria-label="Watch video on YouTube" title="Watch video">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.500 0-9.400.5A3 3 0 0 0 .5 6.200C0 8.100 0 12 0 12s0 3.900.5 5.800a3 3 0 0 0 2.100 2.100c1.900.5 9.400.5 9.400.5s7.500 0 9.400-.5a3 3 0 0 0 2.100-2.100c.5-1.900.5-5.800.5-5.800s0-3.900-.5-5.800zM9.600 15.600V8.400l6.200 3.600-6.200 3.600z"/></svg>
                 </button>
-            </div>
+            </h2>
 
             <div class="detail-grid">
 
@@ -1201,51 +1190,51 @@ const coverImages = {
 ========================================= */
 
 const gameVideos = {
-    "12 Rivers":"",
-    "Arkham Horror":"",
-    "Batman: Gotham City Chronicles":"",
-    "Battle of Bomoh":"",
-    "Blood Rage":"",
-    "Buffet Boss":"",
+    "12 Rivers":"https://www.youtube.com/watch?v=YKL_-105V-o",
+    "Arkham Horror":"https://www.youtube.com/watch?v=bvCQDXWkxuo",
+    "Batman: Gotham City Chronicles":"https://www.youtube.com/watch?v=oY5ZKgzQeiE",
+    "Battle of Bomoh":"https://www.youtube.com/watch?v=ecIQfF9UGQE",
+    "Blood Rage":"https://www.youtube.com/watch?v=EkvmTFUGiyQ",
+    "Buffet Boss":"https://www.youtube.com/watch?v=WP1nxei_1ZI",
     "Camel Up (Second Edition)":"https://www.youtube.com/watch?v=ylpy5i7_w5s",
-    "Comic Hunters":"",
-    "Critter Kitchen":"",
-    "Cubitos":"",
-    "DCeased: Gotham City Outbreak":"",
-    "Dead of Winter: The Long Night":"",
-    "Drillers":"",
-    "Final Girl Core Box":"",
-    "Green City":"",
-    "Hawker Wars":"",
-    "Horrified: Dungeons & Dragons":"",
-    "Hot Streak":"",
-    "HR: The Toxic Workplace Game":"",
-    "Hues and Cues":"",
-    "I have The Numbers!":"",
-    "JinxO":"",
-    "Jisogi: Anime Studio Tycoon":"",
-    "King of Tokyo: Godzilla":"",
-    "Magical Athlete":"",
-    "The Malaysian Dream":"",
-    "Marvel Dice Throne: Scarlet Witch v. Thor v. Loki v. Spider-Man":"",
-    "Modern Art":"",
-    "Nak Makan Apa":"",
-    "Obscurio":"",
-    "One Piece: Luffy's Bento Panic":"",
-    "Power Hungry Pets":"",
-    "Ready Set Bet":"",
-    "Rebirth":"",
-    "Robo Rally Transformers":"",
-    "Robot Quest Arena":"",
-    "Salami":"",
-    "Sheriff of Nottingham: 2nd Edition":"",
-    "Spooktacular":"",
-    "Survive The Island":"",
-    "Taikun":"",
-    "Thunder Road: Vendetta":"",
-    "Unmatched Adventures: Tales to Amaze":"",
-    "Unmatched Adventures: Teenage Mutant Ninja Turtles":"",
-    "The Vale of Eternity":""
+    "Comic Hunters":"https://www.youtube.com/watch?v=hkNjRPfysJI&t=29s",
+    "Critter Kitchen":"https://www.youtube.com/watch?v=4jaxUGjdDt4&t=248s",
+    "Cubitos":"https://www.youtube.com/watch?v=E20MsykdYMQ",
+    "DCeased: Gotham City Outbreak":"https://www.youtube.com/watch?v=fHpXA8zCeHU&t=518s",
+    "Dead of Winter: The Long Night":"https://www.youtube.com/watch?v=63FT-LXLun4",
+    "Drillers":"https://www.youtube.com/watch?v=6JDFdUDKu1I",
+    "Final Girl Core Box":"https://www.youtube.com/watch?v=pQ3IiUF4txE&t=566s",
+    "Green City":"https://www.youtube.com/watch?v=_tk4yGz7WEg",
+    "Hawker Wars":"https://www.youtube.com/watch?v=8RdeEDfdkNc",
+    "Horrified: Dungeons & Dragons":"https://www.youtube.com/watch?v=gBXW6pEiixo",
+    "Hot Streak":"https://www.youtube.com/watch?v=qwtUa2Mevfk",
+    "HR: The Toxic Workplace Game":"https://www.youtube.com/watch?v=1evjBuOyqAM",
+    "Hues and Cues":"https://www.youtube.com/watch?v=emL0VvBnaMQ",
+    "I have The Numbers!":"https://www.youtube.com/watch?v=D8RSQQpHx2I",
+    "JinxO":"https://www.youtube.com/watch?v=OiiWgGTtvMI",
+    "Jisogi: Anime Studio Tycoon":"https://www.youtube.com/watch?v=99892uQLU4g&t=112s",
+    "King of Tokyo: Godzilla":"https://www.youtube.com/watch?v=BZ7cX_UcrUo",
+    "Magical Athlete":"https://www.youtube.com/watch?v=OXmNWrHc8xw",
+    "The Malaysian Dream":"https://www.youtube.com/watch?v=HyBupp2n5_I&t=310s",
+    "Marvel Dice Throne: Scarlet Witch v. Thor v. Loki v. Spider-Man":"https://www.youtube.com/watch?v=vM8wUW9654Q",
+    "Modern Art":"https://www.youtube.com/watch?v=CrwHrstvA0k&t=371s",
+    "Nak Makan Apa":"https://www.youtube.com/watch?v=sA5crUVbkZg&t=72s",
+    "Obscurio":"https://www.youtube.com/watch?v=pnCICiN9KSA",
+    "One Piece: Luffy's Bento Panic":"https://www.youtube.com/watch?v=UtEc9gk7Bb4",
+    "Power Hungry Pets":"https://www.youtube.com/watch?v=_uttHEBKn8g",
+    "Ready Set Bet":"https://www.youtube.com/watch?v=xEPxRVTv5ko",
+    "Rebirth":"https://www.youtube.com/watch?v=nsSxvOOfzsc&t=61s",
+    "Robo Rally Transformers":"https://www.youtube.com/watch?v=KrDSlHzlfIU",
+    "Robot Quest Arena":"https://www.youtube.com/watch?v=0fiCEIFXZy8",
+    "Salami":"https://www.youtube.com/watch?v=y8PB7NnAGdg",
+    "Sheriff of Nottingham: 2nd Edition":"https://www.youtube.com/watch?v=ofZS29XArzM",
+    "Spooktacular":"https://www.youtube.com/watch?v=WlKnTvOWH9o",
+    "Survive The Island":"https://www.youtube.com/watch?v=iuaXh_pNqCc",
+    "Taikun":"https://www.youtube.com/watch?v=oMwDFqYJNFE",
+    "Thunder Road: Vendetta":"https://www.youtube.com/watch?v=AGhHt6mDXMU&t=489s",
+    "Unmatched Adventures: Tales to Amaze":"https://www.youtube.com/watch?v=9tZaEXkkc2s",
+    "Unmatched Adventures: Teenage Mutant Ninja Turtles":"https://www.youtube.com/watch?v=vjTPhHymmJg&t=347s",
+    "The Vale of Eternity":"https://www.youtube.com/watch?v=8qplrjK8ASY"
 };
 
 
@@ -1530,8 +1519,8 @@ function showDetails(id) {
         modalImage.textContent = game.title;
     }
 
-    document.getElementById("modalTitle").textContent =
-        game.title;
+    document.getElementById("modalTitleText").textContent =
+        game.title + " ";
 
     const modalCategory = document.getElementById("modalCategory");
 
