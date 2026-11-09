@@ -23,6 +23,9 @@
     --input:#FFFFFF;
     --overlay:rgba(40,35,25,.65);
     --detail:#FFF0D5;
+    --complexity-light:#477B56;
+    --complexity-medium:#82610B;
+    --complexity-heavy:#A94E4E;
 }
 
 [data-theme="dark"] {
@@ -39,6 +42,9 @@
     --input:#252A38;
     --overlay:rgba(0,0,0,.8);
     --detail:#373447;
+    --complexity-light:#8CC99B;
+    --complexity-medium:#E2C36E;
+    --complexity-heavy:#E58B8B;
 }
 
 * {
@@ -309,6 +315,18 @@ header {
 
 .complexity {
     color:var(--primary);
+}
+
+.complexity-light {
+    color:var(--complexity-light);
+}
+
+.complexity-medium {
+    color:var(--complexity-medium);
+}
+
+.complexity-heavy {
+    color:var(--complexity-heavy);
 }
 
 .no-results {
@@ -1294,6 +1312,13 @@ function formatComplexity(game) {
     return "Heavy";
 }
 
+function complexityClass(game) {
+    const complexity = formatComplexity(game).toLowerCase();
+    return ["light", "medium", "heavy"].includes(complexity)
+        ? `complexity-${complexity}`
+        : "";
+}
+
 
 /* =========================================
    DISPLAY GAMES
@@ -1390,7 +1415,9 @@ function displayGames(data) {
 
             const statValue = document.createElement("span");
             statValue.className =
-                "stat-value" + (index === 2 ? " complexity" : "");
+                "stat-value" + (index === 2
+                    ? ` complexity ${complexityClass(game)}`
+                    : "");
             statValue.textContent = value;
 
             stat.append(statLabel,statValue);
@@ -1542,8 +1569,9 @@ function showDetails(id) {
     document.getElementById("modalTime").textContent =
         formatTime(game);
 
-    document.getElementById("modalComplexity").textContent =
-        formatComplexity(game);
+    const modalComplexity = document.getElementById("modalComplexity");
+    modalComplexity.textContent = formatComplexity(game);
+    modalComplexity.className = `complexity ${complexityClass(game)}`;
 
     const winCondition = gameWinConditions[game.title];
     document.getElementById("modalWinSection").hidden = !winCondition;
